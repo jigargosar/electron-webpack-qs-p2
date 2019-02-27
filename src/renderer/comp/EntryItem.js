@@ -7,7 +7,8 @@ function EntryItem({ entry, actions }) {
   }
   return (
     <div className="pv2 code" onClick={onClick}>
-      {entry.content}
+      <div>{entry.content}</div>
+      <div>{entry.createdAt}</div>
     </div>
   )
 }
