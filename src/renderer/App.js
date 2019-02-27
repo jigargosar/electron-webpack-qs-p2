@@ -21,7 +21,7 @@ function App() {
       </header>
       <div className="pv2" />
       {getDisplayEntries(model).map(entry => (
-        <EntryItem key={entry._id} note={entry} actions={actions} />
+        <EntryItem key={entry._id} entry={entry} actions={actions} />
       ))}
     </div>
   )

@@ -1,19 +1,19 @@
 import * as PropTypes from 'prop-types'
 import React from 'react'
 
-function EntryItem({ note, actions }) {
+function EntryItem({ entry, actions }) {
   const onClick = () => {
-    console.table(note)
+    console.table(entry)
   }
   return (
     <div className="pv2 code" onClick={onClick}>
-      {note.content}
+      {entry.content}
     </div>
   )
 }
 
 EntryItem.propTypes = {
-  note: PropTypes.object.isRequired,
+  entry: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 }
 export default EntryItem
