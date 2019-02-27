@@ -115,6 +115,28 @@ export function useAppModel() {
   useLogModelEffect(model)
   useEntryDbChangesEffect(setModel)
 
+  const stateUpdaters = useMemo(
+    () => ({
+      setLastErrMsg(err) {
+        console.error('setLastErrMsg', err)
+        return R.assoc('lastErrMsg')(err.message)
+      },
+      onAddClicked: () => addNewEntry(setModel),
+      onDeleteAllClicked: () => deleteAllEntries(setModel),
+      onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
+    }),
+    [],
+  )
+
+  const effects = useMemo(
+    () => ({
+      onAddClicked: () => addNewEntry(setModel),
+      onDeleteAllClicked: () => deleteAllEntries(setModel),
+      onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
+    }),
+    [],
+  )
+
   const actions = useMemo(
     () => ({
       onAddClicked: () => addNewEntry(setModel),
