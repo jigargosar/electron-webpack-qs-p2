@@ -26,30 +26,6 @@ function otherwiseHandlePouchDbError(setModel) {
   )
 }
 
-function addNewEntry(setModel) {
-  const newEntry = createNewEntry()
-  R.pipe(
-    it.put(newEntry),
-    otherwiseHandlePouchDbError(setModel),
-  )(db)
-}
-
-function deleteAllEntries(setModel) {
-  R.pipe(
-    it.allDocs({ include_docs: true }),
-    R.then(
-      R.pipe(
-        R.prop('rows'),
-        R.pluck('doc'),
-        R.map(R.mergeLeft({ _deleted: true })),
-        db.bulkDocs(_),
-      ),
-    ),
-    R.then(R.tap(console.log)),
-    otherwiseHandlePouchDbError(setModel),
-  )(db)
-}
-
 function setLastErrMsg(err) {
   console.error('setLastErrMsg', err)
   return R.assoc('lastErrMsg')(err.message)
