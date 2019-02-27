@@ -50,17 +50,6 @@ function deleteAllEntries(setModel) {
   )(db)
 }
 
-function handleEntryDbChange(change) {
-  return model => {
-    if (change.deleted) {
-      return R.dissocPath(['entryById', change.id])(model)
-    } else {
-      const doc = change.doc
-      return R.assocPath(['entryById', doc._id])(doc)(model)
-    }
-  }
-}
-
 function setLastErrMsg(err) {
   console.error('setLastErrMsg', err)
   return R.assoc('lastErrMsg')(err.message)
@@ -139,8 +128,30 @@ export function useAppModel() {
 
   const effects = useMemo(
     () => ({
-      onAddClicked: () => addNewEntry(setModel),
-      onDeleteAllClicked: () => deleteAllEntries(setModel),
+      otherwiseHandlePouchDbError() {
+        return R.otherwise(stateUpdaters.setLastErrMsg)
+      },
+      onAddClicked: () => {
+        const newEntry = createNewEntry()
+        R.pipe(
+          it.put(newEntry),
+          effects.otherwiseHandlePouchDbError,
+        )(db)
+      },
+      onDeleteAllClicked: () =>
+        R.pipe(
+          it.allDocs({ include_docs: true }),
+          R.then(
+            R.pipe(
+              R.prop('rows'),
+              R.pluck('doc'),
+              R.map(R.mergeLeft({ _deleted: true })),
+              db.bulkDocs(_),
+            ),
+          ),
+          R.then(R.tap(console.log)),
+          effects.otherwiseHandlePouchDbError,
+        )(db),
       onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
     }),
     [],
