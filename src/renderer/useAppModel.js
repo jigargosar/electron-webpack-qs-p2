@@ -2,9 +2,9 @@ import * as R from 'ramda'
 import PouchDb from 'pouchdb-browser'
 import * as nanoid from 'nanoid'
 import faker from 'faker'
-import { useEffect, useMemo, useState } from 'react'
-import { getCached, setCache } from './cache-helpers'
-import { _, it } from 'param.macro'
+import {useEffect, useMemo, useState} from 'react'
+import {getCached, setCache} from './cache-helpers'
+import {_, it} from 'param.macro'
 
 const db = new PouchDb('journal-entries')
 
@@ -100,7 +100,6 @@ export function useAppModel() {
       R.mergeDeepRight({
         entryById: {},
         lastErrMsg: null,
-        sv: {},
       }),
       R.defaultTo({}),
       getCached,
