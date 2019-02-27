@@ -126,16 +126,17 @@ export function useAppModel() {
     return () => changes.cancel()
   }, [])
 
-  const effects = useMemo(
-    () => ({
-      otherwiseHandlePouchDbError() {
-        return R.otherwise(stateUpdaters.setLastErrMsg)
-      },
+  const effects = useMemo(() => {
+    const otherwiseHandlePouchDbError = R.otherwise(
+      stateUpdaters.setLastErrMsg,
+    )
+
+    return {
       onAddClicked: () => {
         const newEntry = createNewEntry()
         R.pipe(
           it.put(newEntry),
-          effects.otherwiseHandlePouchDbError,
+          otherwiseHandlePouchDbError,
         )(db)
       },
       onDeleteAllClicked: () =>
@@ -150,12 +151,11 @@ export function useAppModel() {
             ),
           ),
           R.then(R.tap(console.log)),
-          effects.otherwiseHandlePouchDbError,
+          otherwiseHandlePouchDbError,
         )(db),
       onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
-    }),
-    [],
-  )
+    }
+  }, [])
 
   const actions = useMemo(
     () => ({
