@@ -96,13 +96,28 @@ export function useAppModel() {
     )('appModel'),
   )
 
+  function wrapWithSetModel(updaters) {
+    return R.mapObjIndexed(setModel)(updaters)
+  }
+
   const stateUpdaters = useMemo(
-    () => ({
-      setLastErrMsg(err) {
-        console.error('setLastErrMsg', err)
-        return R.assoc('lastErrMsg')(err.message)
-      },
-    }),
+    () =>
+      wrapWithSetModel({
+        setLastErrMsg(err) {
+          console.error('setLastErrMsg', err)
+          return R.assoc('lastErrMsg')(err.message)
+        },
+        handleEntryDbChange(change) {
+          return model => {
+            if (change.deleted) {
+              return R.dissocPath(['entryById', change.id])(model)
+            } else {
+              const doc = change.doc
+              return R.assocPath(['entryById', doc._id])(doc)(model)
+            }
+          }
+        },
+      }),
     [],
   )
 
@@ -117,8 +132,8 @@ export function useAppModel() {
   useEffect(() => {
     const changes = db
       .changes({ include_docs: true, live: true })
-      .on('change', change => setModel(handleEntryDbChange(change)))
-      .on('error', err => setModel(setLastErrMsg(err)))
+      .on('change', change => stateUpdaters.handleEntryDbChange(change))
+      .on('error', err => stateUpdaters.setLastErrMsg(err))
     return () => changes.cancel()
   }, [])
 
