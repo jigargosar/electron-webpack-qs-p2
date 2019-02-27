@@ -1,0 +1,9 @@
+.DS_Store
+dist/
+node_modules/
+thumbs.db
+.idea/workspace.xml
+node_modules
+yarn-error.log
+.idea/workspace.xml
+node_modules
