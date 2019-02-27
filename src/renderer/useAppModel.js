@@ -20,7 +20,7 @@ function createNewEntry() {
 function otherwiseHandlePouchDbError(setModel) {
   return R.otherwise(
     R.pipe(
-      handleNotesDbError,
+      setLastErrMsg,
       setModel,
     ),
   )
@@ -61,8 +61,8 @@ function handleEntryDbChange(change) {
   }
 }
 
-function handleNotesDbError(err) {
-  console.error('handleNotesDbError', err)
+function setLastErrMsg(err) {
+  console.error('setLastErrMsg', err)
   return R.assoc('lastErrMsg')(err.message)
 }
 
@@ -78,7 +78,7 @@ function useEntryDbChangesEffect(setModel) {
     const changes = db
       .changes({ include_docs: true, live: true })
       .on('change', change => setModel(handleEntryDbChange(change)))
-      .on('error', err => setModel(handleNotesDbError(err)))
+      .on('error', err => setModel(setLastErrMsg(err)))
     return () => changes.cancel()
   }, [])
 }
