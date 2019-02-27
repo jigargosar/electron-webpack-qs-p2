@@ -160,14 +160,5 @@ export function useAppModel() {
     }
   }, [])
 
-  // const actions = useMemo(
-  //   () => ({
-  //     onAddClicked: () => addNewEntry(setModel),
-  //     onDeleteAllClicked: () => deleteAllEntries(setModel),
-  //     onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
-  //   }),
-  //   [],
-  // )
-
   return [model, effects]
 }
