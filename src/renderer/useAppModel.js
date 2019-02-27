@@ -119,7 +119,7 @@ export function useAppModel() {
     () => ({
       onAddClicked: () => addNewEntry(setModel),
       onDeleteAllClicked: () => deleteAllEntries(setModel),
-      onNoteListHeadingClick: () => console.table(getAllEntries(model)),
+      onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
     }),
     [],
   )

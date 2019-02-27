@@ -1,6 +1,6 @@
 import React from 'react'
 import NoteItem from './comp/NoteItem'
-import { getDisplayEntries, useAppModel } from './useAppModel'
+import {getDisplayEntries, useAppModel} from './useAppModel'
 import Button from './comp/Button'
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="sans-serif lh-title measure-wide center">
       <header className="flex items-center">
-        <div className="f4 pv2" onClick={actions.onNoteListHeadingClick}>
+        <div className="f4 pv2" onClick={actions.onEntryListHeadingClicked}>
           Journal Entries
         </div>
         <div className="flex-grow-1" />
