@@ -96,17 +96,18 @@ export function useAppModel() {
     )('appModel'),
   )
 
+  const stateUpdaters = useMemo(
+    () => ({
+      setLastErrMsg(err) {
+        console.error('setLastErrMsg', err)
+        return R.assoc('lastErrMsg')(err.message)
+      },
+    }),
+    [],
+  )
+
   if (process.env.NODE_ENV !== 'production') {
     window.model = model
-    const stateUpdaters = useMemo(
-      () => ({
-        setLastErrMsg(err) {
-          console.error('setLastErrMsg', err)
-          return R.assoc('lastErrMsg')(err.message)
-        },
-      }),
-      [],
-    )
   }
 
   useEffect(() => setCache('appModel', model), [model])
