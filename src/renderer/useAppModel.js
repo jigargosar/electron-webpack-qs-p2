@@ -86,7 +86,12 @@ export function useAppModel() {
   )
 
   function wrapWithSetModel(updaters) {
-    return R.mapObjIndexed(setModel)(updaters)
+    return R.mapObjIndexed(fn =>
+      R.compose(
+        setModel,
+        fn,
+      ),
+    )(updaters)
   }
 
   const actions = useMemo(
@@ -148,7 +153,7 @@ export function useAppModel() {
               db.bulkDocs(_),
             ),
           ),
-          R.then(R.tap(console.log)),
+          R.then(console.log('bulkDocsResponse', _)),
           otherwiseHandlePouchDbError,
         )(db),
       onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
