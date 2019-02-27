@@ -22,8 +22,7 @@ function EntryItem({ entry, actions }) {
   return (
     <div className="pv2 code" onClick={onClick}>
       <div>{entry.content}</div>
-      <div>{dayjs(entry.createdAt).format()}</div>
-      <div>{displayTimeAgo}</div>
+      <div title={dayjs(entry.createdAt).format()}>{displayTimeAgo}</div>
     </div>
   )
 }
