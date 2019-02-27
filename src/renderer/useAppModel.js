@@ -17,20 +17,6 @@ function createNewEntry() {
   }
 }
 
-function otherwiseHandlePouchDbError(setModel) {
-  return R.otherwise(
-    R.pipe(
-      setLastErrMsg,
-      setModel,
-    ),
-  )
-}
-
-function setLastErrMsg(err) {
-  console.error('setLastErrMsg', err)
-  return R.assoc('lastErrMsg')(err.message)
-}
-
 function useLogModelEffect(model) {
   // useEffect(() => {
   //   const allNotes = R.values(model.entryById)
