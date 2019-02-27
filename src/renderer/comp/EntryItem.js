@@ -1,5 +1,8 @@
 import * as PropTypes from 'prop-types'
 import React from 'react'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 function EntryItem({ entry, actions }) {
   const onClick = () => {
@@ -8,7 +11,8 @@ function EntryItem({ entry, actions }) {
   return (
     <div className="pv2 code" onClick={onClick}>
       <div>{entry.content}</div>
-      <div>{entry.createdAt}</div>
+      <div>{dayjs(entry.createdAt).format()}</div>
+      <div>{dayjs(entry.createdAt).fromNow()}</div>
     </div>
   )
 }
