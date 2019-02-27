@@ -73,16 +73,6 @@ function useLogModelEffect(model) {
   // }, [model.entryById])
 }
 
-function useEntryDbChangesEffect(setModel) {
-  useEffect(() => {
-    const changes = db
-      .changes({ include_docs: true, live: true })
-      .on('change', change => setModel(handleEntryDbChange(change)))
-      .on('error', err => setModel(setLastErrMsg(err)))
-    return () => changes.cancel()
-  }, [])
-}
-
 function getAllEntries(model) {
   return R.values(model.entryById)
 }
@@ -113,7 +103,14 @@ export function useAppModel() {
   useEffect(() => setCache('appModel', model), [model])
 
   useLogModelEffect(model)
-  useEntryDbChangesEffect(setModel)
+
+  useEffect(() => {
+    const changes = db
+      .changes({ include_docs: true, live: true })
+      .on('change', change => setModel(handleEntryDbChange(change)))
+      .on('error', err => setModel(setLastErrMsg(err)))
+    return () => changes.cancel()
+  }, [])
 
   const stateUpdaters = useMemo(
     () => ({
@@ -121,9 +118,6 @@ export function useAppModel() {
         console.error('setLastErrMsg', err)
         return R.assoc('lastErrMsg')(err.message)
       },
-      onAddClicked: () => addNewEntry(setModel),
-      onDeleteAllClicked: () => deleteAllEntries(setModel),
-      onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
     }),
     [],
   )
