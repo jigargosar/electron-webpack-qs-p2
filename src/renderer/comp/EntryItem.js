@@ -13,11 +13,11 @@ function EntryItem({ entry, actions }) {
   )
 
   useEffect(() => {
-    const clearId = setTimeout(() => {
+    const clearId = setInterval(() => {
       setDisplayTimeAgo(dayjs(entry.createdAt).fromNow())
     }, 1000)
-    return () => clearTimeout(clearId)
-  })
+    return () => clearInterval(clearId)
+  }, [entry.createdAt])
 
   return (
     <div className="pv2 code" onClick={onClick}>
