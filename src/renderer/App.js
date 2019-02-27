@@ -20,8 +20,8 @@ function App() {
         <Button onClick={actions.onDeleteAllClicked}>delete all</Button>
       </header>
       <div className="pv2" />
-      {getDisplayEntries(model).map(note => (
-        <EntryItem key={note._id} note={note} actions={actions} />
+      {getDisplayEntries(model).map(entry => (
+        <EntryItem key={entry._id} note={entry} actions={actions} />
       ))}
     </div>
   )
