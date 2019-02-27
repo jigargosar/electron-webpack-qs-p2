@@ -89,7 +89,7 @@ export function useAppModel() {
     return R.mapObjIndexed(setModel)(updaters)
   }
 
-  const stateUpdaters = useMemo(
+  const actions = useMemo(
     () =>
       wrapWithSetModel({
         setLastErrMsg(err) {
@@ -121,15 +121,13 @@ export function useAppModel() {
   useEffect(() => {
     const changes = db
       .changes({ include_docs: true, live: true })
-      .on('change', stateUpdaters.handleEntryDbChange)
-      .on('error', stateUpdaters.setLastErrMsg)
+      .on('change', actions.handleEntryDbChange)
+      .on('error', actions.setLastErrMsg)
     return () => changes.cancel()
   }, [])
 
   const effects = useMemo(() => {
-    const otherwiseHandlePouchDbError = R.otherwise(
-      stateUpdaters.setLastErrMsg,
-    )
+    const otherwiseHandlePouchDbError = R.otherwise(actions.setLastErrMsg)
 
     return {
       onAddClicked: () => {
@@ -157,14 +155,14 @@ export function useAppModel() {
     }
   }, [])
 
-  const actions = useMemo(
-    () => ({
-      onAddClicked: () => addNewEntry(setModel),
-      onDeleteAllClicked: () => deleteAllEntries(setModel),
-      onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
-    }),
-    [],
-  )
+  // const actions = useMemo(
+  //   () => ({
+  //     onAddClicked: () => addNewEntry(setModel),
+  //     onDeleteAllClicked: () => deleteAllEntries(setModel),
+  //     onEntryListHeadingClicked: () => console.table(getAllEntries(model)),
+  //   }),
+  //   [],
+  // )
 
-  return [model, actions]
+  return [model, effects]
 }
