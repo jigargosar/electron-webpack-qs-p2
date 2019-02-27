@@ -121,8 +121,8 @@ export function useAppModel() {
   useEffect(() => {
     const changes = db
       .changes({ include_docs: true, live: true })
-      .on('change', change => stateUpdaters.handleEntryDbChange(change))
-      .on('error', err => stateUpdaters.setLastErrMsg(err))
+      .on('change', stateUpdaters.handleEntryDbChange)
+      .on('error', stateUpdaters.setLastErrMsg)
     return () => changes.cancel()
   }, [])
 
